@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #87CEEB;
+            color: black;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: 50px;
+            padding: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            background: #2ecc71;
+            color: white;
+            cursor: pointer;
+        }
+        .weather-info {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather App</h1>
+        <input type="text" id="country" placeholder="Enter country name">
+        <button onclick="getWeather()">Search</button>
+        <div class="weather-info" id="weatherInfo"></div>
+    </div>
+    <script>
+        async function getWeather() {
+            const country = document.getElementById('country').value;
+            const apiKey = '9c703bba53a841f79e4163754253003';
+            const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${country}`;
+            
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('Weather data not available');
+                }
+                const data = await response.json();
+                document.getElementById('weatherInfo').innerHTML = `
+                    <h2>${data.location.name}, ${data.location.country}</h2>
+                    <h3>Temperature: ${data.current.temp_c}°C</h3>
+                    <p>Date & Time: ${data.location.localtime}</p>
+                `;
+            } catch (error) {
+                document.getElementById('weatherInfo').innerHTML = '<p>Invalid country name or data unavailable.</p>';
+            }
+        }
+    </script>
+</body>
+</html>
